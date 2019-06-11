@@ -40,7 +40,7 @@ Cart = []
 
 while True:
     x = input("Please input a product identifier, or 'DONE' if there are no more items:")
-    if x == "DONE":
+    if x.lower() == "done":
         break
     else:
         # matching_products = [p for p in products if str(p["id"]) == str(x)]
