@@ -43,12 +43,13 @@ while True:
     if x == "DONE":
         break
     else:
-        matching_products = [p for p in products if str(p["id"]) == str(x)]
-        matching_prod = matching_products[0]
-        print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
-        Total_products += 1
-        Total_price += matching_prod["price"]
-
+        # matching_products = [p for p in products if str(p["id"]) == str(x)]
+        # matching_prod = matching_products[0]
+        # print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
+        # Total_products += 1
+        # Total_price += matching_prod["price"]
+        Cart.append(x)
+#print(Cart)
 
 # TODO: Checkpoint 2: Look-up Products
 
@@ -61,12 +62,24 @@ print("---------------------------------")
 now = datetime.datetime.now()
 print("Checkout at:", now.strftime("%Y-%m-%d %I:%M %p"))
 print("---------------------------------")
+print("SELECTED PRODUCTS:")
+
+for item in Cart:
+    matching_products = [p for p in products if str(p["id"]) == str(item)]
+    matching_prod = matching_products[0]
+    print(" ...", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
+    Total_products += 1
+    Total_price += matching_prod["price"]
 
 print("---------------------------------")
 print("TOTAL ITEMS IN CART:", str(Total_products))
-print("SUBTOTAL:", str(Total_price))
-print("TAX:")
-print("TOTAL:")
+print("SUBTOTAL:", str("${0:.2f}".format(Total_price)))
+nyc_tax = Total_price*0.08875
+print("NYC TAX:",str("${0:.2f}".format(nyc_tax)))
+sum_total = Total_price+nyc_tax
+print("TOTAL:",str("${0:.2f}".format(sum_total)))
 print("---------------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("---------------------------------")
+
+# TODO: add condition for when input identifier is not on the list, and when done is not capitalized
