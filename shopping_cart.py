@@ -42,13 +42,17 @@ while True:
     x = input("Please input a product identifier, or 'DONE' if there are no more items:")
     if x.lower() == "done":
         break
-    else:
+    if [p for p in products if str(p["id"]) == str(x)]:   
+        Cart.append(x)
+    else: # input not equal to 'done' or an existing product identifier, then ask for an input again
         # matching_products = [p for p in products if str(p["id"]) == str(x)]
         # matching_prod = matching_products[0]
         # print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
         # Total_products += 1
         # Total_price += matching_prod["price"]
-        Cart.append(x)
+        # Cart.append(x)
+        print("You have inputted an invalid value. TRY AGAIN!")
+        continue
 #print(Cart)
 
 # TODO: Checkpoint 2: Look-up Products
@@ -81,5 +85,3 @@ print("TOTAL:",str("${0:.2f}".format(sum_total)))
 print("---------------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("---------------------------------")
-
-# TODO: add condition for when input identifier is not on the list, and when done is not capitalized
