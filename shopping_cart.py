@@ -34,6 +34,26 @@ products = [
 #print(products)
 
 # TODO: Checkpoint 1: Capturing User Inputs
+Total_products = 0
+Total_price = 0
+Cart = []
+
+while True:
+    x = input("Please input a product identifier, or 'DONE' if there are no more items:")
+    if x == "DONE":
+        break
+    else:
+        matching_products = [p for p in products if str(p["id"]) == str(x)]
+        matching_prod = matching_products[0]
+        print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
+        Total_products += 1
+        Total_price += matching_prod["price"]
+
+
+# TODO: Checkpoint 2: Look-up Products
+
+
+# TODO: Checkpoint 3: Printing the Receipt
 print("---------------------------------")
 print("Uno Dos Tres Grocery")
 print("WWW.UNO-DOS-TRES.COM")
@@ -42,18 +62,11 @@ now = datetime.datetime.now()
 print("Checkout at:", now.strftime("%Y-%m-%d %I:%M %p"))
 print("---------------------------------")
 
-Total_products = 0
-Cart = []
-
-x = input("Please input a product identifier, or 'DONE' if there are no more items:")
-matching_products = [p for p in products if str(p["id"]) == str(x)]
-matching_prod = matching_products[0]
-
-print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
-
-
-# TODO: Checkpoint 2: Look-up Products
-
-
-# TODO: Checkpoint 3: Printing the Receipt
-
+print("---------------------------------")
+print("TOTAL ITEMS IN CART:", str(Total_products))
+print("SUBTOTAL:", str(Total_price))
+print("TAX:")
+print("TOTAL:")
+print("---------------------------------")
+print("THANKS, SEE YOU AGAIN SOON!")
+print("---------------------------------")
