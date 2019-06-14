@@ -3,11 +3,8 @@ import datetime
 import csv
 import pandas as pd
 
-# TODO: Using pandas package to read .csv data file
-# prods = pd.read_csv("~/Desktop/Github/shopping-cart/data/products.csv")
-
 #from pprint import pprint
-
+## Alternative 1 Data Setup: Keeping a list of products within the source code
 products = [
     {"id":1, "name": "Chocolate Sandwich Cookies", "department": "snacks", "aisle": "cookies cakes", "price": 3.50},
     {"id":2, "name": "All-Seasons Salt", "department": "pantry", "aisle": "spices seasonings", "price": 4.99},
@@ -31,9 +28,18 @@ products = [
     {"id":20, "name": "Pomegranate Cranberry & Aloe Vera Enrich Drink", "department": "beverages", "aisle": "juice nectars", "price": 4.25}
 ] # based on data from Instacart: https://www.instacart.com/datasets/grocery-shopping-2017
 
-#print(products)
+## TODO: Alternative 2 Data Setup: Read .csv data file -- THIS IS INCOMPLETE
+# products = pd.read_csv("C:/Users/Jz67807/Documents/GitHub/shopping-cart/data/products.csv")
+csv_file_path = "data/products.csv"
 
-# TODO: Checkpoint 1: Capturing User Inputs
+with open(csv_file_path,"r") as csv_file:
+    reader = csv.reader(csv_file)
+## TODO: Alternative 3 Data Setup: Referencing Google Sheets Datastore -- THIS NEEDS TO BE CODED
+
+# print(products)
+# print(type(products))
+
+## Checkpoint 1: Capturing User Inputs & Look-up Products
 Total_products = 0
 Total_price = 0
 Cart = []
@@ -51,14 +57,11 @@ while True:
         # Total_products += 1
         # Total_price += matching_prod["price"]
         # Cart.append(x)
-        print("You have inputted an invalid value. TRY AGAIN!")
+        print("Hey, are you sure that product identifier is correct? Please try again!")
         continue
 #print(Cart)
 
-# TODO: Checkpoint 2: Look-up Products
-
-
-# TODO: Checkpoint 3: Printing the Receipt
+## Checkpoint 2: Printing the Receipt
 print("---------------------------------")
 print("Uno Dos Tres Grocery")
 print("WWW.UNO-DOS-TRES.COM")
@@ -85,3 +88,33 @@ print("TOTAL:",str("${0:.2f}".format(sum_total)))
 print("---------------------------------")
 print("THANKS, SEE YOU AGAIN SOON!")
 print("---------------------------------")
+
+###########OUTPUT RESULT###########
+# Please input a product identifier, or 'DONE' if there are no more items:5
+# Please input a product identifier, or 'DONE' if there are no more items:11
+# Please input a product identifier, or 'DONE' if there are no more items:12
+# Please input a product identifier, or 'DONE' if there are no more items:20
+# Please input a product identifier, or 'DONE' if there are no more items:done
+# ---------------------------------
+# Uno Dos Tres Grocery
+# WWW.UNO-DOS-TRES.COM
+# ---------------------------------
+# Checkout at: 2019-06-14 11:18 AM
+# ---------------------------------
+# SELECTED PRODUCTS:
+#  ... Green Chile Anytime Sauce ($7.99)
+#  ... Peach Mango Juice ($1.99)
+#  ... Chocolate Fudge Layer Cake ($18.50)
+#  ... Pomegranate Cranberry & Aloe Vera Enrich Drink ($4.25)
+# ---------------------------------
+# TOTAL ITEMS IN CART: 4
+# SUBTOTAL: $32.73
+# NYC TAX: $2.90
+# TOTAL: $35.63
+# ---------------------------------
+# THANKS, SEE YOU AGAIN SOON!
+# ---------------------------------
+###########END OUTPUT RESULT###########
+
+
+## TODO: Handling Pricing per Pound
