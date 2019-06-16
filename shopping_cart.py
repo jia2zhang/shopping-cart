@@ -2,6 +2,7 @@
 import datetime
 import csv
 import pandas as pd
+import os #to help us navigate to the new receipts folder later
 
 #from pprint import pprint
 ## Alternative 1 Data Setup: Keeping a list of products within the source code
@@ -44,85 +45,104 @@ with open(csv_file_path,"r") as csv_file:
 Total_products = 0
 Total_price = 0
 Cart = []
-Pounds_banana = 1.0
+# Pounds_banana = 1.0
+
+def to_usd(cost):
+    return str("${0:.2f}".format(cost))
+
 
 while True:
     x = input("Please input a product identifier, or 'DONE' if there are no more items:")
     if x.lower() == "done":
         break
-    if [p for p in products if str(p["id"]) == str(x)]:   
-        Cart.append(x)
-        # if p["price_per"] == "pound": TODO 
-        #     Pounds_banana = input("Please input the number of pounds: ")
-        # else:
-        #     continue
-    else: # input not equal to 'done' or an existing product identifier, then ask for an input again
-        # matching_products = [p for p in products if str(p["id"]) == str(x)]
-        # matching_prod = matching_products[0]
-        # print("SELECTED PRODUCTS:", matching_prod["name"], "("+str("${0:.2f}".format(matching_prod["price"]))+")")
-        # Total_products += 1
-        # Total_price += matching_prod["price"]
-        # Cart.append(x)
+    Valid_product_identifier = False
+    for p in products:
+        if str(p["id"]) == str(int(x)): # making sure to trim off leading 0 in front of 'x'
+            Valid_product_identifier = True
+            if p["price_per"] == "pound":
+                Pounds_banana = float(input("Please input number of pounds, e.g. 5.4: "))
+                # price = "%.2f" % float(p["price"]*Pounds_banana)
+                price = p["price"]*Pounds_banana
+                Cart.append(p["name"]+", "+to_usd(price))
+                Total_price += price
+            else:
+                price = to_usd(p["price"])
+                Cart.append(p["name"]+", "+price)
+                Total_price += p["price"]
+            Total_products += 1
+    if Valid_product_identifier == False:
         print("Hey, are you sure that product identifier is correct? Please try again!")
         continue
 #print(Cart)
 
 ## Checkpoint 2: Printing the Receipt
-print("---------------------------------")
-print("Uno Dos Tres Grocery")
-print("WWW.UNO-DOS-TRES.COM")
-print("---------------------------------")
-now = datetime.datetime.now()
-print("Checkout at:", now.strftime("%Y-%m-%d %I:%M %p"))
-print("---------------------------------")
-print("SELECTED PRODUCTS:")
+os.chdir("receipts") # navigate to the "receipts" folder
+file_name = ""+datetime.datetime.now().strftime("%Y-%m-%d-%H-%M-%S-%f")+".txt"
 
-for item in Cart:
-    matching_products = [p for p in products if str(p["id"]) == str(item)]
-    matching_prod = matching_products[0]
-    price = str("${0:.2f}".format(matching_prod["price"]*Pounds_banana))
-    print(" ...", matching_prod["name"], "("+price+")")
-    Total_products += 1
-    Total_price += matching_prod["price"]
+with open(file_name, "w") as file: #write the receipt to the "receipts" folder
+    file.write("---------------------------------\n")
+    file.write("Uno Dos Tres Grocery\n")
+    file.write("WWW.UNO-DOS-TRES.COM\n")
+    file.write("---------------------------------\n")  
+    file.write("Checkout at: "+ datetime.datetime.now().strftime("%Y-%m-%d %I:%M %p"))
+    file.write("\n---------------------------------\n")
+    file.write("SELECTED PRODUCTS:")
 
-print("---------------------------------")
-print("TOTAL ITEMS IN CART:", str(Total_products))
-print("SUBTOTAL:", str("${0:.2f}".format(Total_price)))
-nyc_tax = Total_price*0.08875
-print("NYC TAX:",str("${0:.2f}".format(nyc_tax)))
-sum_total = Total_price+nyc_tax
-print("TOTAL:",str("${0:.2f}".format(sum_total)))
-print("---------------------------------")
-print("THANKS, SEE YOU AGAIN SOON!")
-print("---------------------------------")
+    for item in Cart:
+        file.write("\n ..." + item)
+        # matching_products = [p for p in products if str(p["id"]) == str(item)]
+        # matching_prod = matching_products[0]
+        # price = str("${0:.2f}".format(matching_prod["price"]*Pounds_banana))
+        # print(" ...", matching_prod["name"], "("+price+")")
+        # Total_products += 1
+        # Total_price += matching_prod["price"]
 
+    file.write("\n---------------------------------")
+    file.write("\nTOTAL ITEMS IN CART: "+ str(Total_products))
+    file.write("\nSUBTOTAL: " + to_usd(Total_price))
+    nyc_tax = Total_price*0.08875
+    file.write("\nNYC TAX: " + to_usd(nyc_tax))
+    sum_total = Total_price+nyc_tax
+    file.write("\nTOTAL: " + to_usd(sum_total))
+    file.write("\n---------------------------------")
+    file.write("\nTHANKS, SEE YOU AGAIN SOON!")
+    file.write("\n---------------------------------")
+
+with open(file_name, "r") as file: #Finally print out the receipt after finish writing to "receipts" folder
+    contents = file.read()
+    print(contents)
 ###########OUTPUT RESULT###########
-# Please input a product identifier, or 'DONE' if there are no more items:5
-# Please input a product identifier, or 'DONE' if there are no more items:11
-# Please input a product identifier, or 'DONE' if there are no more items:12
-# Please input a product identifier, or 'DONE' if there are no more items:20
+# Please input a product identifier, or 'DONE' if there are no more items:21
+# Please input number of pounds, e.g. 5.4: 2.0 
+# Please input a product identifier, or 'DONE' if there are no more items:02
+# Please input a product identifier, or 'DONE' if there are no more items:1
+# Please input a product identifier, or 'DONE' if there are no more items:17
+# Please input a product identifier, or 'DONE' if there are no more items:7
 # Please input a product identifier, or 'DONE' if there are no more items:done
 # ---------------------------------
 # Uno Dos Tres Grocery
 # WWW.UNO-DOS-TRES.COM
 # ---------------------------------
-# Checkout at: 2019-06-14 11:18 AM
+# Checkout at: 2019-06-16 07:00 PM
 # ---------------------------------
 # SELECTED PRODUCTS:
-#  ... Green Chile Anytime Sauce ($7.99)
-#  ... Peach Mango Juice ($1.99)
-#  ... Chocolate Fudge Layer Cake ($18.50)
-#  ... Pomegranate Cranberry & Aloe Vera Enrich Drink ($4.25)
+#  ...Organic Bananas, $1.58
+#  ...All-Seasons Salt, $4.99
+#  ...Chocolate Sandwich Cookies, $3.50
+#  ...Rendered Duck Fat, $9.99
+#  ...Pure Coconut Water With Orange, $3.50
 # ---------------------------------
-# TOTAL ITEMS IN CART: 4
-# SUBTOTAL: $32.73
-# NYC TAX: $2.90
-# TOTAL: $35.63
+# TOTAL ITEMS IN CART: 5
+# SUBTOTAL: $23.56
+# NYC TAX: $2.09
+# TOTAL: $25.65
 # ---------------------------------
 # THANKS, SEE YOU AGAIN SOON!
 # ---------------------------------
 ###########END OUTPUT RESULT###########
 
 
-## TODO: Handling Pricing per Pound
+## TODO: Handling Pricing per Pound - CHECK
+## TODO: Writing Receipts to File - CHECK
+## TODO: Refractor price-formatting logic into a function called something like to_usd() - CHECK
 
