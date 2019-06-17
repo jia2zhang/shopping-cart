@@ -48,7 +48,7 @@ Cart = []
 # Pounds_banana = 1.0
 
 def to_usd(cost):
-    return str("${0:.2f}".format(cost))
+    return str("${0:,.2f}".format(cost))
 
 
 while True:
